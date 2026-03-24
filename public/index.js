@@ -1,146 +1,93 @@
-listar();
+async function carregar() {
+    const resp = await fetch('/usuario');
+    const dados = await resp.json();
+    
+    let html = `
+        <div class="table-container">
+            <table class="table table-hover text-center align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>E-mail</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    dados.forEach(p => {
+        html += `
+            <tr>
+                <td>${p.idpessoa}</td>
+                <td>${p.nome}</td>
+                <td>${p.telefone}</td>
+                <td>${p.email || ''}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-secondary me-2" onclick="editar(${p.idpessoa})" title="Editar">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="excluir(${p.idpessoa})" title="Excluir">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table></div>';
+    document.getElementById('conteudo').innerHTML = html;
+}
 
 function novo() {
-    document.getElementById("conteudo").style.display = "none";
-    document.getElementById("formulario").style.display = "block";
-    document.getElementById("txtnome").value = "";
-    document.getElementById("txttelefone").value = "";
+    document.getElementById('txtid').value = '';
+    document.getElementById('txtnome').value = '';
+    document.getElementById('txttelefone').value = '';
+    document.getElementById('txtemail').value = '';
+    document.getElementById('formulario').style.display = 'block';
 }
 
-function salvar() {
-    inserir();
-}
+async function salvar() {
+    const id = document.getElementById('txtid').value;
+    const nome = document.getElementById('txtnome').value;
+    const telefone = document.getElementById('txttelefone').value;
+    const email = document.getElementById('txtemail').value;
 
+    const metodo = id ? 'PUT' : 'POST';
+    const url = id ? `/usuario/${id}` : '/usuario';
 
-
-async function listar() {
-    document.getElementById("conteudo").innerHTML = "aguarde...";
-
-    const resp = await fetch("/usuario", {
-        method: "GET",
-        headers: {
-            "Content-Type" : "application/json"
-        }
+    await fetch(url, {
+        method: metodo,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, telefone, email })
     });
 
-    if (!resp.ok) {
-        console.log("erro "+resp.status);
-    }
+    cancelar();
+    carregar(); 
+}
 
+function cancelar() {
+    document.getElementById('formulario').style.display = 'none';
+}
+
+async function editar(id) {
+    const resp = await fetch(`/usuario/${id}`);
+    const pessoa = await resp.json();
     
-    const dados = await resp.json();
-    let tabela = `<table width='100%' border='1'>
-                  <th>Nome</th>
-                  <th>Telefone</th>
-                  `;
-    for (let i=0; i<dados.length; i++) {
-        tabela += `<tr>
-                    <td>${dados[i].nome}</td>
-                    <td>${dados[i].telefone}</td>
-                   </tr>`;
-    }
-    tabela += `</table>`;
-
-
-    document.getElementById("conteudo").innerHTML = tabela;
+    document.getElementById('txtid').value = pessoa.idpessoa;
+    document.getElementById('txtnome').value = pessoa.nome;
+    document.getElementById('txttelefone').value = pessoa.telefone;
+    document.getElementById('txtemail').value = pessoa.email || '';
+    
+    document.getElementById('formulario').style.display = 'block';
 }
 
-async function consultar() {
-    document.getElementById("conteudo").innerHTML = "aguarde...";
-
-    const resp = await fetch("/usuario/222", {
-        method: "GET",
-        headers: {
-            "Content-Type" : "application/json"
-        }
-    });
-
-    if (!resp.ok) {
-        console.log("erro "+resp.status);
+async function excluir(id) {
+    if(confirm('Deseja excluir o cadastro?')) {
+        await fetch(`/usuario/${id}`, { method: 'DELETE' });
+        carregar(); 
     }
-
-    //se fosse JSON, converte a resposta pra JSON
-    //const dados = await resp.json();
-    const retorno = await resp.text();
-
-    document.getElementById("conteudo").innerHTML = retorno;
 }
 
-async function inserir() {
-    document.getElementById("conteudo").innerHTML = "aguarde...";
-
-    const novo = {
-        nome: document.getElementById("txtnome").value,
-        telefone: document.getElementById("txttelefone").value
-    }
-
-    const resp = await fetch("/usuario", {
-        method: "POST",
-        headers: {
-            "Content-Type" : "application/json"
-        },
-        body: JSON.stringify(novo)
-    });
-
-    if (!resp.ok) {
-        console.log("erro "+resp.status);
-    }
-
-    //se fosse JSON, converte a resposta pra JSON
-    //const dados = await resp.json();
-    const retorno = await resp.text();
-
-    document.getElementById("conteudo").style.display = "block";
-    document.getElementById("formulario").style.display = "none";
-    listar();
-}
-
-async function alterar() {
-    document.getElementById("conteudo").innerHTML = "aguarde...";
-
-    const dados = {
-        nome: "Bill Gates",
-        email: "bill@microsoft.com"
-    }
-
-    const resp = await fetch("/usuario/123", {
-        method: "PUT",
-        headers: {
-            "Content-Type" : "application/json"
-        },
-        body: JSON.stringify(dados)
-    });
-
-    if (!resp.ok) {
-        console.log("erro "+resp.status);
-    }
-
-    //se fosse JSON, converte a resposta pra JSON
-    //const dados = await resp.json();
-    const retorno = await resp.text();
-
-    document.getElementById("conteudo").innerHTML = retorno;
-}
-
-async function excluir() {
-    document.getElementById("conteudo").innerHTML = "aguarde...";
-
-    const resp = await fetch("/usuario/123", {
-        method: "DELETE",
-        headers: {
-            "Content-Type" : "application/json"
-        }
-    });
-
-    if (!resp.ok) {
-        console.log("erro "+resp.status);
-    }
-
-    //se fosse JSON, converte a resposta pra JSON
-    //const dados = await resp.json();
-    const dados = await resp.text();
-
-    document.getElementById("conteudo").innerHTML = dados;
-}
-
-
+carregar();

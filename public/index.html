@@ -1,27 +1,45 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Exemplo</title>
-        <link rel="stylesheet" type="text/css" href="index.css">
-    </head>
-    <body>
-        <h1>Exemplo</h1>
-        <button onclick="novo()">Novo</button>
-        <div id="conteudo">
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastros</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body class="container mt-5">
+    <button class="btn btn-primary mb-4" onclick="novo()">Novo Cadastro</button>
+    
+    <div id="formulario" class="card p-4 mb-4" style="display: none;">
+        <input type="hidden" id="txtid">
+        
+        <div class="mb-3">
+            <label class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="txtnome"/>
         </div>
-        <div id="formulario" style="display: none;">
-            Nome:
-            <input type="text" id="txtnome"/>
-            <br/>
-            Telefone:
-            <input type="text" id="txttelefone"/>
-            <br/>
-            <button onclick="salvar()">Salvar</button>
+        
+        <div class="mb-3">
+            <label class="form-label">Telefone:</label>
+            <input type="text" class="form-control" id="txttelefone"/>
         </div>
 
-        <script src="index.js"></script>
-    </body>
+        <div class="mb-3">
+            <label class="form-label">E-mail:</label>
+            <input type="email" class="form-control" id="txtemail"/>
+        </div>
+        
+        <div>
+            <button class="btn btn-primary me-2" onclick="salvar()">Salvar</button>
+            <button class="btn btn-secondary me-2" onclick="cancelar()">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="conteudo"></div>
+
+    <script src="index.js"></script>
+</body>
 </html>
