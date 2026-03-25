@@ -12,29 +12,40 @@
     <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body class="container mt-5">
-    <button class="btn btn-primary mb-4" onclick="novo()">Novo Cadastro</button>
+    <div class="text-center mb-4">
+        <button class="btn btn-primary" onclick="novo()">Novo Cadastro</button>
+    </div>
     
     <div id="formulario" class="card p-4 mb-4" style="display: none;">
         <input type="hidden" id="txtid">
         
         <div class="mb-3">
             <label class="form-label">Nome:</label>
-            <input type="text" class="form-control" id="txtnome"/>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                <input type="text" class="form-control" id="txtnome"/>
+            </div>
         </div>
         
         <div class="mb-3">
             <label class="form-label">Telefone:</label>
-            <input type="text" class="form-control" id="txttelefone"/>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                <input type="text" class="form-control" id="txttelefone"/>
+            </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">E-mail:</label>
-            <input type="email" class="form-control" id="txtemail"/>
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                <input type="email" class="form-control" id="txtemail"/>
+            </div>
         </div>
         
-        <div>
+        <div class="mt-3 text-center">
             <button class="btn btn-primary me-2" onclick="salvar()">Salvar</button>
-            <button class="btn btn-secondary me-2" onclick="cancelar()">Cancelar</button>
+            <button class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
         </div>
     </div>
 
